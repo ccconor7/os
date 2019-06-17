@@ -8,23 +8,23 @@
 VID_MEM equ 0xB8000
 WH_ON_BL equ 0x0f ;WHite on BLack
 
-print_str:
+printstr_32:
 	pusha
 	mov edx, VID_MEM
 
-print_str_loop:
+printstr_32_loop:
 	mov al, [ebx]
 	mov ah, WH_ON_BL
 
 	cmp al, 0
-	je print_str_done
+	je done_32
 
 	mov [edx], ax
 	add ebx, 1
 	add edx, 2
 
-	jmp print_str_loop
+	jmp printstr_32_loop
 
-print_str_done:
+done_32:
 	popa
 	ret

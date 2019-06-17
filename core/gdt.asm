@@ -26,10 +26,10 @@ gdt_code:
 gdt_data:
 	dw 0xffff
 	dw 0x0
-	dw 0x0
+	db 0x0
 	db 10010010b
 	db 11001111b
-	db 0
+	db 0x0
 
 ; End of GDT
 ;  serves as a point of reference when calculating the size of the GDT
@@ -39,7 +39,7 @@ gdt_end:
 ; GDT descriptor
 ;  size of GTD = (address of GDT end) - (address of GDT start) - 1
 gdt_descriptor:
-	dw gtd_end - gdt_start - 1
+	dw gdt_end - gdt_start - 1
 	dd gdt_start
 
 CODE_SEG equ gdt_code - gdt_start

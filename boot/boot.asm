@@ -1,32 +1,60 @@
+;
+; boot.bin: a boot sector to boot a 32-bit (protected mode) C kernel
+;
+
 [org 0x7c00]
+KERNEL_OFFSET equ 0x1000	; Kernel will be loaded at 0x1000
 
-mov [BOOT_DRIVE], dl		; BIOS stores boot drive in dl
+	mov [BOOT_DRIVE], dl	; The boot drive is stored in DL (by the BIOS)
 
-mov bp, 0x8000			; initialise stack at 0x8000
-mov sp, bp			;  far away from boot sector
+	mov bp, 0x9000		; Stack set-up
+	mov sp, bp
 
-mov bx, 0x9000
-mov dh, 5			; load 5 sectors from 0x0000(ES):0x9000(BX)
-mov dl, [BOOT_DRIVE]		;  from the boot disk
-call disk_load
+	mov bx, MSG_REAL_MODE
+	call printstr_16	; Print "16-bit real mode" indicator
+	
+	call load_kernel	; Load kernel from the disk
+	call switch		; Switch to 32-bit protected mode
 
-mov dx, [0x9000]
-call print_hex
+	jmp $			
 
-mov dx, [0x9000 + 512]
-call print_hex
-
-jmp $
-
-%include "print_string.asm"
-%include "print_hex.asm"
+; === INCLUDE FILES === ;
+%include "../print/printstr_16.asm"
+%include "../print/printstr_32.asm"
+%include "../print/print_hex.asm"
+%include "../core/gdt.asm"
+%include "../core/pm_switch.asm"
 %include "disk.asm"
 
-BOOT_DRIVE: db 0
+[bits 16]
 
+load_kernel:
+	mov bx, MSG_LOAD_KERNEL	
+	call printstr_16
+
+	mov bx, KERNEL_OFFSET	; disk_load parameter setup
+	mov dh, 15		;	- load first 15 sectors from the 
+	mov dl, [BOOT_DRIVE]	;	boot disk (kernel code) to KERNEL_OFFSET
+	call disk_load
+
+	ret
+
+[bits 32]
+
+begin_pm:			; 32-bit protected mode initialisation
+	mov ebx, MSG_PROT_MODE		
+	call printstr_32	; Print "32-bit protected mode" indicator
+
+	call KERNEL_OFFSET	; Jump to the address of the loaded kernel code
+			
+	jmp $			; Hang
+
+; === GLOBAL VARIABLES === ;
+BOOT_DRIVE 	db 0
+MSG_REAL_MODE	db "Operation mode: 16 bit (real mode)", 0
+MSG_PROT_MODE	db "Operation mode: 32 bit (protected mode)", 0
+MSG_LOAD_KERNEL db "Loading kernel...", 0
+
+; === BOOT SECTOR PADDING === ;
 times 510-($-$$) db 0
 dw 0xaa55
-
-times 256 dw 0xdead
-times 256 dw 0xface
-

@@ -20,7 +20,7 @@ disk_load:
 
 disk_error:
 	mov bx, DISK_ERR_MSG
-	call print_string
+	call printstr_16
 	mov dh, ah		; init error message
 	call print_hex		; print error message 
 				; http://stanislavs.org/helppc/int_13-1.html
@@ -28,7 +28,7 @@ disk_error:
 
 sector_error:
 	mov bx, SECTOR_ERR_MSG
-	call print_string
+	call printstr_16
 	jmp $
 
 DISK_ERR_MSG db "Disk error", 0
