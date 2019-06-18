@@ -1,11 +1,12 @@
 ;
 ; Print a character to the screen by using video memory (VGA)
-; 	* Video memory starts @ 0xB8000
-;	** Colors:
+; 	Video memory starts @ 0xB8000
+;	Colors:
 ;	    - 0x0f: white txt, black bg?
+
 [bits 32]
 
-VID_MEM equ 0xB8000
+VID_MEM equ 0xB8000			
 WH_ON_BL equ 0x0f ;WHite on BLack
 
 printstr_32:
