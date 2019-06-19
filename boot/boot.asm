@@ -14,7 +14,8 @@ KERNEL_OFFSET equ 0x1000	; Kernel will be loaded at 0x1000
 
 	mov bx, MSG_REAL_MODE
 	call printstr_16	; Print "16-bit real mode" indicator
-;	call printnl		; Print a new line
+	call printnl		; Print a new line
+	call printnl
 	
 	call load_kernel	; Call load_kernel, which will load the kernel from the disk
 	call switch		; Call switch, which will switch the CPU to 32-bit protected mode
@@ -25,7 +26,6 @@ KERNEL_OFFSET equ 0x1000	; Kernel will be loaded at 0x1000
 %include "../print/printstr_16.asm"
 %include "../print/printstr_32.asm"
 %include "../print/print_hex.asm"
-;%include "../print/printnl.asm"
 %include "../core/gdt.asm"
 %include "../core/pm_switch.asm"
 %include "disk.asm"
@@ -35,7 +35,7 @@ KERNEL_OFFSET equ 0x1000	; Kernel will be loaded at 0x1000
 load_kernel:
 	mov bx, MSG_LOAD_KERNEL	
 	call printstr_16
-;	call printnl
+	call printnl
 
 	mov bx, KERNEL_OFFSET	; disk_load parameter setup
 	mov dh, 15		;	- load first 15 sectors from the 
@@ -49,7 +49,7 @@ load_kernel:
 begin_pm:			; 32-bit protected mode initialisation
 	mov ebx, MSG_PROT_MODE		
 	call printstr_32	; Print "32-bit protected mode" indicator
-;	call printnl	
+;	call printnl
 
 	call KERNEL_OFFSET	; Jump to the address of the loaded kernel code, 
 				;  giving control to the kernel
@@ -60,6 +60,7 @@ begin_pm:			; 32-bit protected mode initialisation
 BOOT_DRIVE 	db 0
 MSG_REAL_MODE	db "Operation mode: 16 bit (real mode)", 0
 MSG_PROT_MODE	db "Operation mode: 32 bit (protected mode)", 0
+MSG_LOADED	db "Kernel loaded", 0
 MSG_LOAD_KERNEL db "Loading kernel...", 0
 
 ; === BOOT SECTOR PADDING === ;

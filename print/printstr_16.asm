@@ -16,3 +16,16 @@ printstr_16_loop:
 done_16:
 	popa		; pop all registers and values
 	ret		; return to caller function
+
+printnl:
+	pusha
+
+	mov ah, 0x0e
+	mov al, 0x0a
+	int 0x10
+
+	mov al, 0x0d
+	int 0x10
+
+	popa
+	ret
