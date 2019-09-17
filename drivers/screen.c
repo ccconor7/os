@@ -12,14 +12,14 @@ int getOffset(int col, int row) { return 2 * (row * MAX_COLS + col); }
 int getRowOffset(int offset) { return offset / (2 * MAX_COLS); }
 int getColOffset(int offset) { return (offset - (getRowOffset(offset) * 2 * MAX_COLS)) / 2; }
 
-int printChar(char c, int col, int row, char attr);
+int printChar(char c, int col, int row, char *attr);
 
 
 // ------------------------
 // -- Private kernel API --
 // ------------------------
 
-int printChar(char c, int col, int row, char attr) {
+int printChar(char c, int col, int row, char *attr) {
 	unsigned char *vid_mem = (unsigned char*) VID_ADDRESS;
 
 	// if no colour
