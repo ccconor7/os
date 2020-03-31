@@ -19,13 +19,14 @@ int printChar(char c, int col, int row, char *attr);
 // -- Private kernel API --
 // ------------------------
 
+// printChar : print character at col, row, or cursor position
 int printChar(char c, int col, int row, char *attr) {
 	unsigned char *vid_mem = (unsigned char*) VID_ADDRESS;
 
-	// if no colour
+	// If no colour, use white text on black
 	if (!attr) attr = WHITE_ON_BLACK;
 
-	// If co-ords are wrong, print red "E"
+	// If co-ords are OOB, print a red "E" for ERROR at bottom left
 	if (col >= MAX_COLS || row >= MAX_ROWS) {
 		vid_mem[2 * (MAX_COLS) * (MAX_ROWS) - 2] = 'E';
 		vid_mem[2 * (MAX_COLS) * (MAX_ROWS) - 1] = RED_ON_WHITE;

@@ -31,4 +31,4 @@ boot.bin: boot/boot.asm
 
 # Remove bin and o files
 clean:
-	rm *.bin *.o
+	rm -r */*.bin */*.o
