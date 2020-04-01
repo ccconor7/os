@@ -27,7 +27,7 @@ KERNEL_OFFSET equ 0x1000	; Kernel will be loaded at 0x1000
 %include "../print/printstr_32.asm"
 %include "../print/print_hex.asm"
 %include "../core/gdt.asm"
-%include "../core/pm_switch.asm"
+%include "../core/switch.asm"
 %include "disk.asm"
 
 [bits 16]
