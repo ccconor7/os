@@ -31,7 +31,7 @@ int print_char(char c, int col, int row, char *attr) {
 		vid_mem[2 * (MAX_COLS) * (MAX_ROWS) - 2] = 'E';
 		vid_mem[2 * (MAX_COLS) * (MAX_ROWS) - 1] = RED_ON_WHITE;
 
-		return get_cffset(col, row);
+		return get_offset(col, row);
 	}
 
 	int offset;
@@ -92,7 +92,7 @@ void kprint_at(char *msg, int col, int row) {
 	else { 
 		offset = get_cursor_offset();
 		row = get_row_offset(offset);
-		col = get_col_cffset(offset);	
+		col = get_col_offset(offset);	
 	}
 
 	int i = 0;

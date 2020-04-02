@@ -4,11 +4,15 @@
 void entry() {
 }
 
+//void set_cursor_offset(int offset);
+
 void main() {
 	clear_screen();
-	char *VGA = (char*) 0xB8000;
-	*VGA = 's';
-	*(VGA+2) = 'h';
-	*(VGA+4) = 'e';
-	*(VGA+6) = 'd';
+	unsigned char *vid_mem = (unsigned char*) VID_ADDRESS;
+	*vid_mem= 's';
+	*(vid_mem+2) = 'h';
+	*(vid_mem+4) = 'e';
+	*(vid_mem+6) = 'd';
+
+	set_cursor_offset(100);
 }
