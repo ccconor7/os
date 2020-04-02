@@ -9,6 +9,6 @@
 #define REG_SCREEN_CTRL 0x3D4
 #define REG_SCREEN_DATA 0x3D5
 
-void clearScreen();
+void clear_screen();
 void kprint_at(char *msg, int col, int row);
 void kprint(char *msg);

@@ -5,7 +5,7 @@ void entry() {
 }
 
 void main() {
-	clearScreen();
+	clear_screen();
 	char *VGA = (char*) 0xB8000;
 	*VGA = 's';
 	*(VGA+2) = 'h';

@@ -3,7 +3,7 @@
 
 
 void main() {
-	clearScreen();
+	clear_screen();
 	//kprint("line \n break");
 	//kprint("aa");
 	//kprint_at("There is a line\nbreak", 0, 20);
