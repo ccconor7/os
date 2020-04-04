@@ -60,7 +60,7 @@ void term_init(void){
     for(size_t y = 0; y < VGA_ROWS; y++) {
         for(size_t x = 0; x < VGA_COLS; x++) {
             const size_t index = y * VGA_COLS + x;
-            term_buffer[index] = vga_entry('.', term_color);
+            term_buffer[index] = vga_entry(' ', term_color);
         }
     }
 }
@@ -76,6 +76,12 @@ void term_put_char_at(char c, uint8_t color, size_t x, size_t y) {
 
 void term_put_char(char c) {
     term_put_char_at(c, term_color, term_col, term_row);
+
+    // Handle newlines
+    if(c == '\n') {
+        term_row++;
+        term_col = -1;
+    }
 
     // If reached edge of screen
     if(++term_col == VGA_COLS) {
@@ -98,5 +104,6 @@ void term_write_string(const char* data) {
 
 void kernel_main(void) {
     term_init();
-    term_write_string("Hello world");
+    term_write_string("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\naaaaaaaaaaaaa");
+    term_write_string("test1\ntest2\ntest3\n");
 }
