@@ -50,13 +50,14 @@ size_t    term_col;
 uint8_t   term_color;
 uint16_t* term_buffer;
 
-void term_init(void){
+void term_init(uint8_t color){
     term_row = 0;
     term_col = 0;
-    term_color = vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK);
+    term_color = color;
     term_buffer = (uint16_t*) 0xB8000;
+}
 
-    // Clear the terminal
+void cls() {
     for(size_t y = 0; y < VGA_ROWS; y++) {
         for(size_t x = 0; x < VGA_COLS; x++) {
             const size_t index = y * VGA_COLS + x;
@@ -69,18 +70,18 @@ void term_set_color(uint8_t color) {
     term_color = color;
 }
 
-void term_put_char_at(char c, uint8_t color, size_t x, size_t y) {
+void term_putch_at(char c, uint8_t color, size_t x, size_t y) {
     const size_t index = y * VGA_COLS + x;
     term_buffer[index] = vga_entry(c, color);
 }
 
-void term_put_char(char c) {
-    term_put_char_at(c, term_color, term_col, term_row);
-
+void term_putch(char c) {
     // Handle newlines
     if(c == '\n') {
         term_row++;
         term_col = -1;
+    } else {
+        term_putch_at(c, term_color, term_col, term_row);
     }
 
     // If reached edge of screen
@@ -92,18 +93,18 @@ void term_put_char(char c) {
     }
 }
 
-void term_write(const char* data, size_t size) {
+void term_put(const char* data, size_t size) {
     for(size_t i = 0; i < size; i++) {
-        term_put_char(data[i]);
+        term_putch(data[i]);
     }
 }
 
-void term_write_string(const char* data) {
-    term_write(data, strlen(data));
+void term_puts(const char* data) {
+    term_put(data, strlen(data));
 }
 
 void kernel_main(void) {
-    term_init();
-    term_write_string("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\naaaaaaaaaaaaa");
-    term_write_string("test1\ntest2\ntest3\n");
+    term_init(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+    term_puts("hello\nhello");
+    //cls();
 }
